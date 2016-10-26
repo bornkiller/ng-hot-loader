@@ -1,0 +1,30 @@
+{
+  "name": "ng-hot-loader",
+  "version": "0.1.0",
+  "description": "make NG HMR possible.",
+  "main": "es5/index.js",
+  "scripts": {
+    "prepublish": "babel index -o es5/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bornkiller/ng-hot-loader.git"
+  },
+  "keywords": [
+    "webpack-hot-loader",
+    "angularjs"
+  ],
+  "author": "bornkiller <hjj491229492@hotmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bornkiller/ng-hot-loader/issues"
+  },
+  "homepage": "https://github.com/bornkiller/ng-hot-loader#readme",
+  "devDependencies": {
+    "babel": "^6.5.2",
+    "babel-cli": "^6.18.0",
+    "babel-preset-es2015": "^6.18.0",
+    "eslint": "^3.8.1"
+  }
+}
