@@ -8,31 +8,33 @@ import path from 'path';
 import util from 'loader-utils';
 import { camelCase, capitalize } from 'lodash';
 
-module.exports = function (input) {
+import hotRouteAcceptor from './hot/route';
+import hotFactoryAcceptor from './hot/factory';
+
+export default function (input) {
   this.cacheable && this.cacheable();
-
+  
   const query = util.parseQuery(this.query);
-
-  const prefix = query.prefix;
-  const basename = path.basename(this.resourcePath, '.factory.js');
-  const targetName = !!prefix ? prefix + capitalize(camelCase(basename)) : camelCase(basename);
-  const targetFactory = camelCase(basename) + 'Factory';
-
-  return `${input}
-    if (module.hot) {
-      module.hot.accept();
+  const resourcePath = this.resourcePath;
+  const basename = path.basename(resourcePath);
   
-      var element = angular.element(document.body);
-      var $injector = element.injector();
+  let result;
   
-      if ($injector) {
-        var prevTargetService = $injector.get('${targetName}');
-        var hotTargetService = $injector.invoke(${targetFactory});
-        var $rootScope = $injector.get('$rootScope');
-        
-        angular.extend(prevTargetService, hotTargetService);
-        $rootScope.$apply();
-      }
-    }
-  `;
+  switch (true) {
+    case basename.endsWith('route.js'):
+      result = hotRouteAcceptor(input, resourcePath);
+      break;
+    case basename.endsWith('factory.js'):
+      result = hotFactoryAcceptor(input, resourcePath, query);
+      break;
+    default:
+      result = input;
+  }
+  
+  // 此处只需要返回字符串变量即可,无需再次手动转义
+  if (this.callback) {
+    this.callback(null, result)
+  } else {
+    return result;
+  }
 };
