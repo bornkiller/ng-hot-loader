@@ -38,4 +38,5 @@ jspm_packages
 
 .DS_Store
 .idea
-/es5
+/dist
+
