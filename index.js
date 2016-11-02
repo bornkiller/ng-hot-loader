@@ -10,6 +10,7 @@ import { camelCase, capitalize } from 'lodash';
 
 import hotRouteAcceptor from './hot/route';
 import hotFactoryAcceptor from './hot/factory';
+import hotModalAcceptor from './hot/modal';
 
 export default function (input) {
   this.cacheable && this.cacheable();
@@ -26,6 +27,9 @@ export default function (input) {
       break;
     case basename.endsWith('factory.js'):
       result = hotFactoryAcceptor(input, resourcePath, query);
+      break;
+    case basename.endsWith('modal.html'):
+      result = hotModalAcceptor(input, resourcePath);
       break;
     default:
       result = input;
