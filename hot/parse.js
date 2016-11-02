@@ -8,6 +8,8 @@
 const templateCaptureReg = /template:\s+require\(([^\(\)]+)\)/gm;
 // 匹配控制器路径不带引号
 const controllerCaptureReg = /import\s+\{\s+(\w+Controller)\s+\}\s+from\s+\'([^']+)\'/gm;
+// 匹配 modal 模板引用路径,临时性方案处理,后续需要进一步树立
+const modalTemplateCaptureReg = /template\:\s+require\((['"])(.+modal\.html)\1\)/g;
 
 /**
  * @description - 分析路由声明中模板
@@ -30,6 +32,28 @@ export function analyzeTemplateRef(template) {
   }
   
   return ngHotTemplate;
+}
+
+/**
+ * @description - 分析控制器中声明中modal模板
+ * @param {string} template
+ * @returns {Array}
+ *
+ * @example
+ * template: require('./flow/hmr.modal.html')
+ */
+export function analyzeModalTemplateRef(template) {
+  let middleware;
+  let ngHotTemplate = [];
+
+  while (middleware = modalTemplateCaptureReg.exec(template)) {
+    ngHotTemplate.push({
+      location: middleware[2],
+      type: 'template'
+    });
+  }
+
+  return ngHotModalTemplate;
 }
 
 /**
