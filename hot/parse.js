@@ -44,16 +44,38 @@ export function analyzeTemplateRef(template) {
  */
 export function analyzeModalTemplateRef(template) {
   let middleware;
-  let ngHotTemplate = [];
-
+  let ngHotModalTemplate = [];
+  
   while (middleware = modalTemplateCaptureReg.exec(template)) {
-    ngHotTemplate.push({
+    ngHotModalTemplate.push({
       location: middleware[2],
       type: 'template'
     });
   }
-
+  
   return ngHotModalTemplate;
+}
+
+/**
+ * @description - 基于路由声明分析生成控制器热替换代码
+ * @param list
+ * @returns {string}
+ */
+export function fireModalHotAccept(list) {
+  let modalHotAccept = list.map(descriptor => {
+    return `
+      module.hot.accept(['${descriptor.location}'], function () {
+        let element = angular.element(document.body);
+        let $injector = element.injector();
+        let $hmr = $injector.get('$hmr');
+        let template = require('${descriptor.location}');
+
+        $hmr.update(template);
+      });
+    `;
+  });
+  
+  return modalHotAccept.join('\n');
 }
 
 /**
@@ -85,7 +107,7 @@ export function analyzeControllerReg(template) {
  * @returns {string}
  */
 export function fireRouteTransferStation(list) {
-  let  routeTransferStation = list.map(descriptor => {
+  let routeTransferStation = list.map(descriptor => {
     if (descriptor.type == 'template') {
       return `{location: '${descriptor.location}', template: require('${descriptor.location}')}`;
     } else {
