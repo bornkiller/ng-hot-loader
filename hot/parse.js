@@ -10,6 +10,9 @@ const templateCaptureReg = /template:\s+require\(([^\(\)]+)\)/gm;
 const controllerCaptureReg = /import\s+\{\s+(\w+Controller)\s+\}\s+from\s+\'([^']+)\'/gm;
 // 匹配 modal 模板引用路径,临时性方案处理,后续需要进一步树立
 const modalTemplateCaptureReg = /template\:\s+require\((['"])(.+modal\.html)\1\)/g;
+// 匹配弹窗控制器路劲
+const modalControllerCaptureReg = /import\s+\{\s+(\w+ModalController)\s+\}\s+from\s+\'([^']+)\'/gm;
+
 
 /**
  * @description - 分析路由声明中模板
@@ -56,6 +59,21 @@ export function analyzeModalTemplateRef(template) {
   return ngHotModalTemplate;
 }
 
+export function analyzeModalControllerRef(template) {
+  let middleware;
+  let ngHotController = [];
+
+  while (middleware = modalControllerCaptureReg.exec(template)) {
+    ngHotController.push({
+      location: middleware[2],
+      name: middleware[1],
+      type: 'controller'
+    });
+  }
+
+  return ngHotController;
+}
+
 /**
  * @description - 基于路由声明分析生成控制器热替换代码
  * @param list
@@ -63,16 +81,29 @@ export function analyzeModalTemplateRef(template) {
  */
 export function fireModalHotAccept(list) {
   let modalHotAccept = list.map(descriptor => {
-    return `
-      module.hot.accept(['${descriptor.location}'], function () {
-        let element = angular.element(document.body);
-        let $injector = element.injector();
-        let $hmr = $injector.get('$hmr');
-        let template = require('${descriptor.location}');
-
-        $hmr.update(template, 'template');
-      });
-    `;
+    if (descriptor.type == 'template') {
+      return `
+        module.hot.accept(['${descriptor.location}'], function () {
+          let element = angular.element(document.body);
+          let $injector = element.injector();
+          let $hmr = $injector.get('$hmr');
+          let template = require('${descriptor.location}');
+  
+          $hmr.update(template, 'template');
+        });
+      `;
+    } else {
+      return `
+        module.hot.accept(['${descriptor.location}'], function () {
+          let element = angular.element(document.body);
+          let $injector = element.injector();
+          let $hmr = $injector.get('$hmr');
+          let controller = require('${descriptor.location}').${descriptor.name};
+    
+          $hmr.update(controller, 'controller');
+        });
+      `;
+    }
   });
   
   return modalHotAccept.join('\n');

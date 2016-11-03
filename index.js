@@ -10,7 +10,7 @@ import { camelCase, capitalize } from 'lodash';
 
 import hotRouteAcceptor from './hot/route';
 import hotFactoryAcceptor from './hot/factory';
-import { transformModalTemplate, hotModalAcceptor } from './hot/modal';
+import { transformModalTemplate, transformModalController, hotModalAcceptor } from './hot/modal';
 
 export default function (input) {
   this.cacheable && this.cacheable();
@@ -20,7 +20,7 @@ export default function (input) {
   const basename = path.basename(resourcePath);
   
   let result;
-  
+
   switch (true) {
     case basename.endsWith('route.js'):
       result = hotRouteAcceptor(input, resourcePath);
@@ -30,6 +30,9 @@ export default function (input) {
       break;
     case basename.endsWith('modal.html'):
       result = transformModalTemplate(input, resourcePath);
+      break;
+    case basename.endsWith('modal.controller.js'):
+      result = transformModalController(input, resourcePath);
       break;
     // $uibModal always occur into *.controller.js
     case basename.endsWith('controller.js'):
