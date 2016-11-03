@@ -4,13 +4,15 @@
  */
 'use strict';
 
+import path from 'path';
 import { camelCase } from 'lodash';
 
 import { analyzeModalTemplateRef, fireModalHotAccept } from './parse';
 
 export function transformModalTemplate (input, resourcePath) {
   // additional html markup for identity
-  let ngModalIdentity = `<!-- @ngModalIdentity ${resourcePath} -->`;
+  let identity = path.relative(process.cwd(), resourcePath);
+  let ngModalIdentity = `<!-- @ngModalIdentity ${identity} -->`;
   
   return `${ngModalIdentity} \n ${input}`;
 }
@@ -18,10 +20,7 @@ export function transformModalTemplate (input, resourcePath) {
 export function hotModalAcceptor (input) {
   let templateRefs = analyzeModalTemplateRef(input);
   let modalHotAccept = fireModalHotAccept(templateRefs);
-  
-  console.log(templateRefs);
-  console.log(modalHotAccept);
-  
+
   return `
     ${input}
     ${modalHotAccept}

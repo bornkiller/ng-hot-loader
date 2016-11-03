@@ -70,7 +70,7 @@ export function fireModalHotAccept(list) {
         let $hmr = $injector.get('$hmr');
         let template = require('${descriptor.location}');
 
-        $hmr.update(template);
+        $hmr.update(template, 'template');
       });
     `;
   });
