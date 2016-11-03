@@ -7,12 +7,12 @@
 import path from 'path';
 import { camelCase } from 'lodash';
 
-export default function (input, resourcePath, query) {
+export function transformHotFactory(input, resourcePath, query) {
   const prefix = query.prefix;
   const basename = camelCase(path.basename(resourcePath, '.factory.js'));
   const factoryRegisterName = !!prefix ? prefix + basename.charAt(0).toUpperCase() + basename.slice(1) : basename;
   const factoryDeclareName = factoryRegisterName + 'Factory';
-  
+
   return `${input}
     if (module.hot) {
       module.hot.accept();

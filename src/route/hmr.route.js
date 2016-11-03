@@ -5,22 +5,18 @@
 import path from 'path';
 import { camelCase } from 'lodash';
 
-import {
-  analyzeTemplateRef,
-  analyzeControllerReg,
-  fireRouteTransferStation,
-  fireRouteHotAccept
-} from './parse';
+import { analyzeTemplateRef, analyzeControllerReg } from './route.parse';
+import { produceRouteTransferStation, produceHotRoute } from './route.engine';
 
-export default function (input, resourcePath) {
+export function transformHotRoute(input, resourcePath) {
   let templateRefs = analyzeTemplateRef(input);
   let controllerRefs = analyzeControllerReg(input);
   let critical = [...templateRefs, ...controllerRefs];
-  let routeTransferStation = fireRouteTransferStation(critical);
-  let routeHotAccept = fireRouteHotAccept(critical);
+  let routeTransferStation = produceRouteTransferStation(critical);
+  let routeHotAccept = produceHotRoute(critical);
   let routeFileName = camelCase(path.basename(resourcePath, '.route.js')) + 'Route';
   let routeDeclareName = routeFileName.charAt(0).toUpperCase() + routeFileName.slice(1);
-  
+
   return `${input}
     if (module.hot) {
       let flatRouteDefinition;
@@ -68,4 +64,4 @@ export default function (input, resourcePath) {
       ${routeHotAccept}
     }
   `;
-};
+}

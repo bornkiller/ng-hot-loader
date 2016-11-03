@@ -8,25 +8,25 @@ import path from 'path';
 import util from 'loader-utils';
 import { camelCase, capitalize } from 'lodash';
 
-import hotRouteAcceptor from './hot/route';
-import hotFactoryAcceptor from './hot/factory';
-import { transformModalTemplate, transformModalController, hotModalAcceptor } from './hot/modal';
+import { transformHotRoute } from './src/route/hmr.route';
+import { transformHotFactory } from './src/factory/hmr.factory';
+import { transformModalTemplate, transformModalController, transformHotModal } from './src/modal/hmr.modal';
 
 export default function (input) {
   this.cacheable && this.cacheable();
-  
+
   const query = util.parseQuery(this.query);
   const resourcePath = this.resourcePath;
   const basename = path.basename(resourcePath);
-  
+
   let result;
 
   switch (true) {
     case basename.endsWith('route.js'):
-      result = hotRouteAcceptor(input, resourcePath);
+      result = transformHotRoute(input, resourcePath);
       break;
     case basename.endsWith('factory.js'):
-      result = hotFactoryAcceptor(input, resourcePath, query);
+      result = transformHotFactory(input, resourcePath, query);
       break;
     case basename.endsWith('modal.html'):
       result = transformModalTemplate(input, resourcePath);
@@ -36,12 +36,12 @@ export default function (input) {
       break;
     // $uibModal always occur into *.controller.js
     case basename.endsWith('controller.js'):
-      result = hotModalAcceptor(input);
+      result = transformHotModal(input);
       break;
     default:
       result = input;
   }
-  
+
   // 此处只需要返回字符串变量即可,无需再次手动转义
   if (this.callback) {
     this.callback(null, result)
