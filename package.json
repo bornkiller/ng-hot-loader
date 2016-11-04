@@ -1,6 +1,6 @@
 {
   "name": "ng-hot-loader",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "description": "make NG HMR possible.",
   "main": "dist/index.js",
   "scripts": {
