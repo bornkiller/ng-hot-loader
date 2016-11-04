@@ -39,7 +39,7 @@ export function produceHotRoute(list) {
       
           $hmr.notify(targetModuleName, template);
         });
-      `
+      `;
     } else {
       return `
         module.hot.accept(['${descriptor.location}'], function () {

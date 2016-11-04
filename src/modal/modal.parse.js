@@ -4,6 +4,8 @@
  */
 'use strict';
 
+/* eslint-disable no-cond-assign */
+
 // 匹配 modal 模板引用路径,临时性方案处理,后续需要进一步树立
 const modalTemplateCaptureReg = /template\:\s+require\((['"])(.+modal\.html)\1\)/g;
 // 匹配弹窗控制器路劲

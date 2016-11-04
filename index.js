@@ -6,7 +6,6 @@
 
 import path from 'path';
 import util from 'loader-utils';
-import { camelCase, capitalize } from 'lodash';
 
 import { transformHotRoute } from './src/route/hmr.route';
 import { transformHotFactory } from './src/factory/hmr.factory';
@@ -44,8 +43,8 @@ export default function (input) {
 
   // 此处只需要返回字符串变量即可,无需再次手动转义
   if (this.callback) {
-    this.callback(null, result)
+    this.callback(null, result);
   } else {
     return result;
   }
-};
+}

@@ -2,6 +2,9 @@
  * @description - ng-hot-loader route possible
  * @author - bornkiller <hjj491229492@hotmail.com>
  */
+'use strict';
+
+/* eslint-disable no-cond-assign */
 
 // 匹配HTML路径自带引号,为保持统一且正则表达式简化,后续处理
 const templateCaptureReg = /template:\s+require\(([^\(\)]+)\)/gm;

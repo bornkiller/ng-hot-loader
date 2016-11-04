@@ -10,7 +10,7 @@ import { camelCase } from 'lodash';
 export function transformHotFactory(input, resourcePath, query) {
   const prefix = query.prefix;
   const basename = camelCase(path.basename(resourcePath, '.factory.js'));
-  const factoryRegisterName = !!prefix ? prefix + basename.charAt(0).toUpperCase() + basename.slice(1) : basename;
+  const factoryRegisterName = prefix ? prefix + basename.charAt(0).toUpperCase() + basename.slice(1) : basename;
   const factoryDeclareName = factoryRegisterName + 'Factory';
 
   return `${input}
