@@ -8,7 +8,7 @@ import path from 'path';
 import util from 'loader-utils';
 
 import { transformHotRoute } from './src/route/hmr.route';
-import { transformHotFactory } from './src/factory/hmr.factory';
+import { transformHotModule } from './src/module/hmr.module';
 import { transformModalTemplate, transformModalController, transformHotModal } from './src/modal/hmr.modal';
 
 export default function (input) {
@@ -24,8 +24,8 @@ export default function (input) {
     case basename.endsWith('route.js'):
       result = transformHotRoute(input, resourcePath);
       break;
-    case basename.endsWith('factory.js'):
-      result = transformHotFactory(input, resourcePath, query);
+    case basename.endsWith('module.js'):
+      result = transformHotModule(input, query);
       break;
     case basename.endsWith('modal.html'):
       result = transformModalTemplate(input, resourcePath);
