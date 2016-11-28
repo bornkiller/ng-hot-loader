@@ -9,6 +9,7 @@ parserOptions:
 env:
   es6: true
   node: true
+  mocha: true
 extends:
   - 'eslint:recommended'
 rules:
@@ -22,6 +23,7 @@ rules:
   quotes:
     - error
     - single
+    - allowTemplateLiterals: true
   semi:
     - error
     - always
