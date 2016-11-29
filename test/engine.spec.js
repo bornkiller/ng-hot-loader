@@ -6,7 +6,7 @@
 // eslint-disable-next-line
 const should = require('should');
 
-const { translateImportType, translateHotDescriptor } = require('../src/engine');
+const { translateImportType, translateModuleDescriptor } = require('../src/engine');
 
 const instance = {
   name: 'promptFactory',
@@ -45,8 +45,8 @@ describe.only('ng-hot-loader engine', function () {
         });
       }`;
 
-    let destructCode = translateHotDescriptor(destructInstance);
-    let defaultCode = translateHotDescriptor(defaultInstance);
+    let destructCode = translateModuleDescriptor(destructInstance);
+    let defaultCode = translateModuleDescriptor(defaultInstance);
 
     destructCode.replace(normalizeReg, '').should.equal(destructExpectation.replace(normalizeReg, ''));
     defaultCode.replace(normalizeReg, '').should.equal(defaultExpectation.replace(normalizeReg, ''));
