@@ -12,23 +12,21 @@ const { transformInlineTemplate, transformInlineController } = require('../src/i
 const options = {encoding: 'utf8'};
 
 describe('ng-hot-loader inline', function () {
-  it('inline html template', function () {
+  it('inline html markup', function () {
     let workingDirectory = process.cwd();
     let resourcePath = path.resolve(__dirname, 'fixture', 'template', 'love.html');
     let input = fs.readFileSync(resourcePath, options);
-    let keywords = `<!-- @ng_hmr_identity test-fixture-template-love-html -->`;
-    let result = transformInlineTemplate(input, resourcePath, workingDirectory);
+    let markup = `<!-- @ng_hmr_identity test-fixture-template-love-html -->`;
 
-    result.includes(keywords).should.be.true();
+    transformInlineTemplate(workingDirectory, resourcePath, input).should.equal(markup);
   });
 
-  it('inline html template', function () {
+  it('inline controller markup', function () {
     let workingDirectory = process.cwd();
     let resourcePath = path.resolve(__dirname, 'fixture', 'controller', 'collection.controller.js');
     let input = fs.readFileSync(resourcePath, options);
-    let keywords = `CollectionController.ng_hmr_identity = 'test-fixture-controller-collection-controller-js'`;
-    let result = transformInlineController(input, resourcePath, workingDirectory);
+    let markup = `CollectionController.ng_hmr_identity = 'test-fixture-controller-collection-controller-js'`;
 
-    result.includes(keywords).should.be.true();
+    transformInlineController(workingDirectory, resourcePath, input).should.equal(markup);
   });
 });
