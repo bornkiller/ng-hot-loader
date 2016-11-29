@@ -33,6 +33,7 @@
   },
   "dependencies": {
     "loader-utils": "^0.2.16",
+    "lodash": "^4.17.2",
     "ng-hot-analyzer": "^0.4.0",
     "strip-comments": "^0.4.4"
   }
