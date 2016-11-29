@@ -4,25 +4,38 @@
  */
 'use strict';
 
-const { transformInlineTemplate, transformInlineController } = require('./src/inline');
+const {
+  analyzeInstanceReference,
+  analyzeTemplateReference,
+  analyzeAccessToken,
+  resolveAnalyzeStream
+} = require('ng-hot-analyzer');
+
+const { combineCrucialMarkup } = require('./src/markup');
+const { translateModuleDescriptor, translateRouteDescriptor } = require('./src/engine');
 
 module.exports = function (input) {
   this.cacheable && this.cacheable();
 
-  let resourcePath = this.resourcePath;
   let workingDirectory = process.cwd();
-  let result;
+  let resourcePath = this.resourcePath;
+  // generate HMR markup
+  let result = combineCrucialMarkup(workingDirectory, resourcePath, input);
+  let list;
+  let HMRCode;
 
   switch (true) {
-    case resourcePath.endsWith('.html'):
-      result = transformInlineTemplate(input, resourcePath, workingDirectory);
+    case resourcePath.endsWith('.module.js'):
+      list = resolveAnalyzeStream(analyzeInstanceReference(result), analyzeAccessToken(result));
+      HMRCode = list.map(descriptor => translateModuleDescriptor(descriptor)).join('\n');
       break;
-    case resourcePath.endsWith(('.controller.js')):
-      result = transformInlineController(input, resourcePath, workingDirectory);
+    case resourcePath.endWith('route.js'):
+      list = [...analyzeInstanceReference(result), ...analyzeTemplateReference(result)];
+      HMRCode = list.map(descriptor => translateRouteDescriptor(descriptor)).join('\n');
       break;
-    default:
-      result = input;
   }
+
+  result = `${result}\n${HMRCode}`;
 
   // 此处只需要返回字符串变量即可,无需再次手动转义
   if (this.callback) {
