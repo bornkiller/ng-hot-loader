@@ -29,13 +29,13 @@ module.exports = function (input) {
       list = resolveAnalyzeStream(analyzeInstanceReference(result), analyzeAccessToken(result));
       HMRCode = list.map(descriptor => translateModuleDescriptor(descriptor)).join('\n');
       break;
-    case resourcePath.endWith('route.js'):
+    case resourcePath.endsWith('.route.js'):
       list = [...analyzeInstanceReference(result), ...analyzeTemplateReference(result)];
       HMRCode = list.map(descriptor => translateRouteDescriptor(descriptor)).join('\n');
       break;
   }
 
-  result = `${result}\n${HMRCode}`;
+  HMRCode && (result = `${result}\n${HMRCode}`);
 
   // 此处只需要返回字符串变量即可,无需再次手动转义
   if (this.callback) {
