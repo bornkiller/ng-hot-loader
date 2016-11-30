@@ -12,7 +12,7 @@ const {
 } = require('ng-hot-analyzer');
 
 const { combineCrucialMarkup } = require('./src/markup');
-const { translateModuleDescriptor, translateRouteDescriptor } = require('./src/engine');
+const { translateModuleDescriptor, translateRouteDescriptor, translateModalDescriptor } = require('./src/engine');
 
 module.exports = function (input) {
   this.cacheable && this.cacheable();
@@ -31,7 +31,13 @@ module.exports = function (input) {
       break;
     case resourcePath.endsWith('.route.js'):
       list = [...analyzeInstanceReference(result), ...analyzeTemplateReference(result)];
+      list = list.filter(ref => ref.type === 'template' || ref.name.includes('Controller'));
       HMRCode = list.map(descriptor => translateRouteDescriptor(descriptor)).join('\n');
+      break;
+    case resourcePath.endsWith('.controller.js'):
+      list = [...analyzeInstanceReference(result), ...analyzeTemplateReference(result)];
+      list = list.filter(ref => ref.type === 'template' || ref.name.includes('ModalController'));
+      HMRCode = list.map(descriptor => translateModalDescriptor(descriptor)).join('\n');
       break;
   }
 

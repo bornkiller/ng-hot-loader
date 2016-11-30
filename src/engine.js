@@ -8,7 +8,8 @@ const { capitalize } = require('lodash');
 module.exports = {
   translateImportType,
   translateModuleDescriptor,
-  translateRouteDescriptor
+  translateRouteDescriptor,
+  translateModalDescriptor
 };
 
 /**
@@ -57,6 +58,34 @@ function translateRouteDescriptor(descriptor) {
          ${translateImportType(descriptor)}
          $hmr.hmrOnChange('RouteController', ${descriptor.name});
          $hmr.hmrDoActive('RouteController', ${descriptor.name});
+        });
+      }`;
+  }
+}
+
+/**
+ * @description
+ * - feature modal HMR code
+ * - maybe problem here, while controller import modal template and model controller, and something weired
+ * @param {NgHotDescriptor} descriptor
+ */
+function translateModalDescriptor(descriptor) {
+  if (descriptor.type === 'template') {
+    return `
+      if (module.hot) {
+        module.hot.accept(['${descriptor.location}'], function() {
+          $hmr.hmrOnChange('ModalTemplate', require('${descriptor.location}'));
+          $hmr.hmrDoActive('ModalTemplate', require('${descriptor.location}'));
+        });
+      };
+    `;
+  } else {
+    return `
+      if (module.hot) {
+       module.hot.accept(['${descriptor.location}'], function () {
+         ${translateImportType(descriptor)}
+         $hmr.hmrOnChange('ModalController', ${descriptor.name});
+         $hmr.hmrDoActive('ModalController', ${descriptor.name});
         });
       }`;
   }
