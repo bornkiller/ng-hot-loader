@@ -6,13 +6,12 @@
 
 const {
   analyzeInstanceReference,
-  analyzeTemplateReference,
   analyzeAccessToken,
   resolveAnalyzeStream
 } = require('ng-hot-analyzer');
 
 const { combineCrucialMarkup } = require('./src/markup');
-const { translateModuleDescriptor, translateRouteDescriptor, translateModalDescriptor } = require('./src/engine');
+const { translateHotDescriptor } = require('./src/engine');
 
 module.exports = function (input) {
   this.cacheable && this.cacheable();
@@ -23,24 +22,13 @@ module.exports = function (input) {
   let result = combineCrucialMarkup(workingDirectory, resourcePath, input);
   let list;
   let HMRCode;
-
-  switch (true) {
-    case resourcePath.endsWith('.module.js'):
-      list = resolveAnalyzeStream(analyzeInstanceReference(result), analyzeAccessToken(result));
-      HMRCode = list.map(descriptor => translateModuleDescriptor(descriptor)).join('\n');
-      break;
-    case resourcePath.endsWith('.route.js'):
-      list = [...analyzeInstanceReference(result), ...analyzeTemplateReference(result)];
-      list = list.filter(ref => ref.type === 'template' || ref.name.includes('Controller'));
-      HMRCode = list.map(descriptor => translateRouteDescriptor(descriptor)).join('\n');
-      break;
-    case resourcePath.endsWith('.controller.js'):
-      list = [...analyzeInstanceReference(result), ...analyzeTemplateReference(result)];
-      list = list.filter(ref => ref.type === 'template' || ref.name.includes('ModalController'));
-      HMRCode = list.map(descriptor => translateModalDescriptor(descriptor)).join('\n');
-      break;
+  
+  // maybe some issue occur here, make sure descriptor match structure definition
+  if (resourcePath.endsWith('.module.js')) {
+    list = resolveAnalyzeStream(analyzeInstanceReference(result), analyzeAccessToken(result));
+    HMRCode = list.map(descriptor => translateHotDescriptor(descriptor)).join('\n');
   }
-
+  
   HMRCode && (result = `${result}\n${HMRCode}`);
 
   // 此处只需要返回字符串变量即可,无需再次手动转义

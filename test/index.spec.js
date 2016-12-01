@@ -12,7 +12,7 @@ const ngHotLoader = require('../');
 const options = {encoding: 'utf8'};
 
 describe.only('ng-hot-loader', function () {
-  it('skip none support template', function () {
+  it('skip none support code', function () {
     let target = path.resolve(__dirname, 'fixture', 'template', 'love.html');
     let template = fs.readFileSync(target, options);
     let result = Reflect.apply(ngHotLoader, {resourcePath: target}, [template]);
@@ -25,11 +25,7 @@ describe.only('ng-hot-loader', function () {
     let target = path.resolve(__dirname, 'fixture', 'share.module.js');
     let template = fs.readFileSync(target, options);
     let result = Reflect.apply(ngHotLoader, {resourcePath: target}, [template]);
-  });
-
-  it.only('decorate route HMR code', function () {
-    let target = path.resolve(__dirname, 'fixture', 'share.route.js');
-    let template = fs.readFileSync(target, options);
-    let result = Reflect.apply(ngHotLoader, {resourcePath: target}, [template]);
+    
+    result.includes('module.hot.accept').should.be.true();
   });
 });
