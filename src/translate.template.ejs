@@ -1,0 +1,11 @@
+if (module.hot) {
+  module.hot.accept(['<%- location %>'], function () {
+ <% if (type === 'destruct') { %>
+    let { <%- name %> } = require('<%- location %>');
+ <% } else { %>
+    let <%- name %> = require('<%- location %>');
+ <% } %>
+    $hmr.hmrOnChange('<%- category %>', '<%- token %>', <%- name %>);
+    $hmr.hmrDoActive('<%- category %>', '<%- token %>', <%- name %>);
+  });
+};
