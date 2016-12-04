@@ -23,9 +23,9 @@ describe('ng-hot-loader inline', function () {
 
   it('inline controller markup', function () {
     let workingDirectory = process.cwd();
-    let resourcePath = path.resolve(__dirname, 'fixture', 'controller', 'collection.controller.js');
+    let resourcePath = path.resolve(__dirname, 'fixture', 'controller', 'love.controller.js');
     let input = fs.readFileSync(resourcePath, options);
-    let markup = `CollectionController.ng_hmr_identity = 'test-fixture-controller-collection-controller-js'`;
+    let markup = `LoveController.ng_hmr_identity = 'test-fixture-controller-love-controller-js'`;
 
     transformInlineController(workingDirectory, resourcePath, input).should.equal(markup);
   });

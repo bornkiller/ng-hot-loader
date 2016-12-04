@@ -18,13 +18,14 @@ module.exports = function (input) {
 
   let workingDirectory = process.cwd();
   let resourcePath = this.resourcePath;
+  // ng-hot-analyzer strip comment to avoid disturb
   // generate HMR markup
   let result = combineCrucialMarkup(workingDirectory, resourcePath, input);
   let list;
   let HMRCode;
   
   // maybe some issue occur here, make sure descriptor match structure definition
-  if (resourcePath.endsWith('.module.js')) {
+  if (resourcePath.endsWith('.js')) {
     list = resolveAnalyzeStream(analyzeInstanceReference(result), analyzeAccessToken(result));
     HMRCode = list.map(descriptor => translateHotDescriptor(descriptor)).join('\n');
   }

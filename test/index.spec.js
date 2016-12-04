@@ -11,7 +11,7 @@ const should = require('should');
 const ngHotLoader = require('../');
 const options = {encoding: 'utf8'};
 
-describe.only('ng-hot-loader', function () {
+describe('ng-hot-loader', function () {
   it('skip none support code', function () {
     let target = path.resolve(__dirname, 'fixture', 'template', 'love.html');
     let template = fs.readFileSync(target, options);
