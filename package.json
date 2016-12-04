@@ -4,7 +4,8 @@
   "description": "make NG HMR possible.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "istanbul cover ./node_modules/.bin/_mocha --report html",
+    "test-travis": "istanbul cover ./node_modules/.bin/_mocha --report lcovonly"
   },
   "repository": {
     "type": "git",
@@ -21,20 +22,13 @@
   },
   "homepage": "https://github.com/bornkiller/ng-hot-loader#readme",
   "devDependencies": {
-    "babel-eslint": "^7.1.0",
-    "babel-preset-es2015-bk": "^1.0.0",
     "eslint": "^3.8.1",
+    "istanbul": "^0.4.5",
     "mocha": "^3.2.0",
-    "rollup": "^0.36.3",
-    "rollup-plugin-babel": "^2.6.1",
-    "rollup-plugin-eslint": "^3.0.0",
-    "rollup-watch": "^2.5.0",
     "should": "^11.1.1"
   },
   "dependencies": {
-    "loader-utils": "^0.2.16",
     "lodash": "^4.17.2",
-    "ng-hot-analyzer": "^0.4.0",
-    "strip-comments": "^0.4.4"
+    "ng-hot-analyzer": "^0.4.0"
   }
 }
