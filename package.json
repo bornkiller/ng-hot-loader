@@ -1,6 +1,6 @@
 {
   "name": "ng-hot-loader",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "make NG HMR possible.",
   "main": "index.js",
   "scripts": {
@@ -29,6 +29,6 @@
   },
   "dependencies": {
     "lodash": "^4.17.2",
-    "ng-hot-analyzer": "^0.4.0"
+    "ng-hot-analyzer": "^0.5.0"
   }
 }
