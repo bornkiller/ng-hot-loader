@@ -1,8 +1,16 @@
 # ng-hot-loader
-personal attempt， make NG HMR possible.
+Transform source code, make ng HMR possible.
 
 ## usage
 ```javascript
+{
+  test: /\.html$/,
+  exclude: /index\.html$/,
+  loaders: [
+    'html-loader?attrs[]=img:src&root=' + path.resolve(__dirname, 'src'),
+    'ng-hot-loader'
+  ]
+},
 {
   test: /\.js$/,
   exclude: /node_modules/,
@@ -13,3 +21,6 @@ personal attempt， make NG HMR possible.
   ]
 }
 ```
+
+## demo 
+https://github.com/bornkiller/angular-boilerplate-webpack
