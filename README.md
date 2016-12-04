@@ -1,4 +1,9 @@
 # ng-hot-loader
+![Build Status](https://img.shields.io/travis/bornkiller/ng-hot-loader/master.svg?style=flat)
+[![Coverage Status](https://coveralls.io/repos/github/bornkiller/ng-hot-loader/badge.svg?branch=master)](https://coveralls.io/github/bornkiller/ng-hot-loader?branch=master)
+![Package Dependency](https://david-dm.org/bornkiller/ng-hot-loader.svg?style=flat)
+![Package DevDependency](https://david-dm.org/bornkiller/ng-hot-loader/dev-status.svg?style=flat)
+
 Transform source code, make ng HMR possible.
 
 ## usage
